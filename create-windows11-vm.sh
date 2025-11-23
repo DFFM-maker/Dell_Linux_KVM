@@ -103,11 +103,16 @@ VIRTIO_ISO="${VM_DIR}/virtio-win.iso"
 
 if [ ! -f "$VIRTIO_ISO" ]; then
     print_info "Downloading VirtIO drivers ISO..."
-    wget -O "$VIRTIO_ISO" "$VIRTIO_ISO_URL" || {
-        print_warning "Failed to download VirtIO drivers. The VM will be created without VirtIO drivers."
+    if wget -O "$VIRTIO_ISO" "$VIRTIO_ISO_URL"; then
+        print_info "VirtIO drivers downloaded successfully"
+    else
+        ERROR_CODE=$?
+        print_warning "Failed to download VirtIO drivers (exit code: $ERROR_CODE)"
+        print_warning "Possible reasons: network connectivity, permissions, or disk space"
+        print_warning "The VM will be created without VirtIO drivers."
         print_warning "You can manually download from: $VIRTIO_ISO_URL"
         VIRTIO_ISO=""
-    }
+    fi
 else
     print_info "VirtIO drivers ISO already exists at $VIRTIO_ISO"
 fi

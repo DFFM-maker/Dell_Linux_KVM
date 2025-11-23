@@ -107,7 +107,11 @@ optimize_huge_pages() {
     
     # Calculate recommended huge pages (reserve 25% of RAM for VMs)
     TOTAL_MEM=$(free -m | awk '/^Mem:/{print $2}')
-    HUGE_PAGES=$((TOTAL_MEM * 25 / 100 / 2))  # 2MB per huge page
+    # 2MB per huge page, ensuring minimum of 512 pages (1GB)
+    HUGE_PAGES=$((TOTAL_MEM * 25 / 100 / 2))
+    if [ $HUGE_PAGES -lt 512 ]; then
+        HUGE_PAGES=512
+    fi
     
     print_info "Total RAM: ${TOTAL_MEM}MB"
     print_info "Recommended huge pages: $HUGE_PAGES (${HUGE_PAGES}MB)"
@@ -189,8 +193,9 @@ optimize_network() {
     sysctl -w net.ipv4.tcp_rmem="4096 87380 67108864" > /dev/null 2>&1
     sysctl -w net.ipv4.tcp_wmem="4096 65536 67108864" > /dev/null 2>&1
     
-    # Make settings persistent
-    cat >> /etc/sysctl.conf << 'EOF'
+    # Make settings persistent (check if not already present)
+    if ! grep -q "KVM VM network optimizations" /etc/sysctl.conf; then
+        cat >> /etc/sysctl.conf << 'EOF'
 # KVM VM network optimizations
 net.core.rmem_max = 134217728
 net.core.wmem_max = 134217728
@@ -198,6 +203,7 @@ net.ipv4.tcp_rmem = 4096 87380 67108864
 net.ipv4.tcp_wmem = 4096 65536 67108864
 net.ipv4.tcp_congestion_control = bbr
 EOF
+    fi
     
     print_info "Network optimization complete!"
     print_info "For VM network performance, ensure VirtIO network drivers are used."

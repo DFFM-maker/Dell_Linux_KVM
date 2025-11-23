@@ -268,6 +268,8 @@ echo ""
 if [ "$XDG_SESSION_TYPE" == "x11" ]; then
     read -p "Would you like to restart GNOME Shell now? (yes/no): " restart
     if [ "$restart" == "yes" ]; then
+        print_warning "Restarting GNOME Shell. Please save your work in all open applications first."
+        read -p "Press Enter to continue after saving your work..."
         print_info "Restarting GNOME Shell..."
         killall -SIGQUIT gnome-shell
     fi
