@@ -1,0 +1,40 @@
+# VM disk images
+*.qcow2
+*.img
+*.iso
+*.raw
+
+# VM snapshots
+*.snapshot
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# Logs
+*.log
+
+# Temporary files
+/tmp/
+*.tmp
+*.swp
+*.swo
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+# Editor specific
+.vscode/
+.idea/
+*.sublime-*
+
+# User specific configs
+*.local
+local-config.sh
+
+# Downloaded ISOs and drivers
+virtio-win.iso
+windows*.iso
+*.vfd
