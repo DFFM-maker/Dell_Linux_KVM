@@ -11,7 +11,7 @@ DRY_RUN=false
 if [[ "${1:-}" == "--dry" ]]; then DRY_RUN=true; fi
 
 TEMPLATE="Win11-Template"
-CLONES=( "Win11-Rockwell" "Win11-Omron" "Win11-Office" )
+CLONES=( "Win11-Rockwell" "Win11-Omron" "Win11-Office" "Win11-Schneider" )
 
 echo "=== DELETE CLONES ==="
 echo "Template protetto: $TEMPLATE"

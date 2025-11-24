@@ -30,9 +30,9 @@ if ! sudo virsh dominfo "$TEMPLATE" &>/dev/null; then
     exit 1
 fi
 
-# Disco COW (Copy-on-Write)
-echo "📀 Creazione disco COW..."
-sudo qemu-img create -f qcow2 -F qcow2 -b "$TEMPLATE_DISK" "$NEW_DISK"
+# Disco indipendente
+echo "📀 Creazione disco indipendente..."
+sudo qemu-img convert -O qcow2 "$TEMPLATE_DISK" "$NEW_DISK"
 
 # Clone VM
 echo "🖥️  Clonazione VM..."
